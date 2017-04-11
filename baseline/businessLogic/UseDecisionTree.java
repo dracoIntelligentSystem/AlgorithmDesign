@@ -17,7 +17,7 @@ public class UseDecisionTree {
 		 J48 tree = new J48();         // new instance of tree
 		 try {
 			tree.setOptions(options);
-			 tree.buildClassifier(data);   // build classifier
+			 //tree.buildClassifier(data);   // build classifier
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
