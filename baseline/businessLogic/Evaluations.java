@@ -11,6 +11,5 @@ public class Evaluations {
 	public static void evaluateModel(Classifier classifier, Instances data) throws Exception{
 		Evaluation eval = new Evaluation(data);
 		 eval.crossValidateModel(classifier, data, 10 , new Random(1));
-		 System.out.println(eval);
 	}
 }
