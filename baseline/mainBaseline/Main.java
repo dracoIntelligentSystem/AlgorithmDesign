@@ -13,10 +13,11 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 
-		Instances data = LoadingDataset.LoadDataset("C:\\Program Files\\Weka-3-6\\data\\iris.arff");
+		Instances data = LoadingDataset.LoadDataset(args[0]);
 		J48 learnedTree = UseDecisionTree.C4dot5(data);
 		 try {
 			Evaluations.evaluateModel(learnedTree, data);
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -19,7 +19,7 @@ public class MainHW {
 		int maxC = 2;
 		
 		try {
-			source = new DataSource("/Users/luca/wekafiles/data/iris.arff");
+			source = new DataSource(args[0]);
 			Instances data = source.getDataSet();
 			
 			// Populate the grid
