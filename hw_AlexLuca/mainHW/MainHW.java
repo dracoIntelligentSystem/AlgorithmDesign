@@ -38,11 +38,8 @@ public class MainHW {
 				treeGrid.add(point);
 			}
 			
-			while (!treeGrid.isEmpty()) {
-				GridPoint p = treeGrid.poll();
-				System.out.println(p.getMetrics().accuracy);
-			}
 			GridPoint max = Collections.max(treeGrid, new AccuracyComparator());
+			System.out.println("max: M = " + String.valueOf(max.m) + ", c = " + String.valueOf(max.c));
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
