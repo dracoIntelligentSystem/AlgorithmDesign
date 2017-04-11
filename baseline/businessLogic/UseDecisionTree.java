@@ -13,10 +13,10 @@ public class UseDecisionTree {
 	
 	public static J48 C4dot5(Instances data){
 		
-		 options[0] = "-U";            // unpruned tree
+		 //options[0] = "-U";            // unpruned tree
 		 J48 tree = new J48();         // new instance of tree
 		 try {
-			tree.setOptions(options);
+			//tree.setOptions(options);
 			 //tree.buildClassifier(data);   // build classifier
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

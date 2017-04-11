@@ -2,7 +2,7 @@ package mainBaseline;
 
 import java.io.IOException;
 
-import businessLogic.Evaluations;
+import businessLogic.Hyperparam;
 import businessLogic.LoadingDataset;
 import businessLogic.UseDecisionTree;
 import weka.classifiers.trees.J48;
@@ -16,8 +16,8 @@ public class Main {
 		Instances data = LoadingDataset.LoadDataset(args[0]);
 		J48 learnedTree = UseDecisionTree.C4dot5(data);
 		 try {
-			Evaluations.evaluateModel(learnedTree, data);
-			
+			//Evaluations.evaluateModel(learnedTree, data);
+			 Hyperparam.runOptimizer(learnedTree, data, 5);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

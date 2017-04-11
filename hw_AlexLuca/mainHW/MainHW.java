@@ -17,7 +17,7 @@ public class MainHW {
 		double step = 0.2; 
 		int minC = 0;
 		int maxC = 2;
-		
+				
 		try {
 			source = new DataSource(args[0]);
 			Instances data = source.getDataSet();
