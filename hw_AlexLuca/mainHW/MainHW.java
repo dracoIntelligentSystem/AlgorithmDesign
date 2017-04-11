@@ -46,18 +46,4 @@ public class MainHW {
 			e.printStackTrace();
 		}
 	}
-	
-
-	public static EvaluationResults evaluateParams(GridPoint point, Instances data) throws Exception {
-		// Stub
-		EvaluationResults result = new EvaluationResults();
-		result.point = point;
-		result.metrics = new Metrics();
-		
-		result.metrics.accuracy = point.m * point.c;
-		
-		return result;
-		
-	}
-
 }
