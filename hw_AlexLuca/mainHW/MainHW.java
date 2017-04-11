@@ -1,17 +1,16 @@
 package mainHW;
+import java.util.Collections;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
-
 
 public class MainHW {
 
 	public static void main(String[] args) {
 		System.out.println("Hello in HW Alex & Luca!!");
 		DataSource source;
-		ConcurrentLinkedQueue<GridPoint> grid;
-		ConcurrentLinkedQueue<EvaluationResults> results;
+		ConcurrentLinkedQueue<GridPoint> grid, treeGrid;
 		
 		int minM = 0;
 		int maxM = 2;
@@ -32,19 +31,18 @@ public class MainHW {
 			}
 			
 			//Evaluate
-			results = new ConcurrentLinkedQueue<EvaluationResults>();
+			treeGrid = new ConcurrentLinkedQueue<GridPoint>();
 			while (!grid.isEmpty()) {
 				GridPoint point = grid.poll();
-				results.add(evaluateParams(point, data));
+				point.computeMetrics();
+				treeGrid.add(point);
 			}
 			
-			while (!results.isEmpty()) {
-				EvaluationResults r = results.poll();
-				System.out.println(r.metrics.accuracy);
-				
+			while (!treeGrid.isEmpty()) {
+				GridPoint p = treeGrid.poll();
+				System.out.println(p.getMetrics().accuracy);
 			}
-			
-			
+			GridPoint max = Collections.max(treeGrid, new AccuracyComparator());
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -52,12 +50,13 @@ public class MainHW {
 		}
 	}
 	
-	
-	public static EvaluationResults evaluateParams(GridPoint point, Instances data) {
+
+	public static EvaluationResults evaluateParams(GridPoint point, Instances data) throws Exception {
 		// Stub
 		EvaluationResults result = new EvaluationResults();
 		result.point = point;
 		result.metrics = new Metrics();
+		
 		result.metrics.accuracy = point.m * point.c;
 		
 		return result;
