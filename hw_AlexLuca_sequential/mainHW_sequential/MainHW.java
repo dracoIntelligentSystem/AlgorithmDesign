@@ -26,6 +26,19 @@ public class MainHW {
 			source = new DataSource(args[0]);
 			Instances data = source.getDataSet();
 			
+			try {
+		        data.setClassIndex(Integer.parseInt(args[1]));
+			} catch (ArrayIndexOutOfBoundsException e) {
+		        data.setClassIndex(data.numAttributes() - 1);
+			} catch (NumberFormatException e) {
+				System.out.println("Incorrect value.");
+				System.exit(1);
+			} catch (IllegalArgumentException e) {
+				System.out.println("Incorrect value.");
+				System.exit(1);
+			}
+
+			
 			Long start = System.currentTimeMillis();
 			Integer count = 0;
 			// Populate the grid
@@ -49,10 +62,6 @@ public class MainHW {
 			Long elapsed = System.currentTimeMillis() - start;
 			System.out.println(((Double)(elapsed/1000.0)).toString());
 			
-//			System.out.println(
-//					"max: M = " + String.valueOf(max.m) + 
-//					", c = " + String.valueOf(max.c) +
-//					"accuracy = " + String.valueOf(max.getMetrics().accuracy));
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
