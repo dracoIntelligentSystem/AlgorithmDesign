@@ -21,14 +21,19 @@ public class Worker implements Runnable {
 	public void run() {
 		try {
 			point.computeMetrics();
+			// accuracy is between 0 and 1, however we 
+			// want to store it as a long. Therefore we
+			// multiply & cast.
+			long accuracy = (long) (point.accuracy * 1e6);
+			// old is the value of maxVal *before* the update
+			long old = maxVal.getAndUpdate(x -> x < accuracy ? accuracy : x);
+			if (old < accuracy) {
+				maxPoint.set(point);
+			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		long accuracy = (long) (point.accuracy * 1e6);
-		if (maxVal.getAndUpdate(x -> x < accuracy ? accuracy : x) == accuracy) {
-			maxPoint.set(point);
-		}
+		
 	}
 
 }
