@@ -6,7 +6,7 @@ import java.util.Comparator;
 public class AccuracyComparator implements Comparator<GridPoint> {
 	
 	// Epsilon
-	private double eps = 1e-8;
+	private double eps = 1e-16;
 	
 	public AccuracyComparator(double eps) {
 		this.eps = eps;
@@ -25,7 +25,7 @@ public class AccuracyComparator implements Comparator<GridPoint> {
 			return 0;
 		}
 		else {
-			return (int) (m1.accuracy - m2.accuracy);
+			return (int) Math.signum(m1.accuracy - m2.accuracy);
 		}		
 	}
 
