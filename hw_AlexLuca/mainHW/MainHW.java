@@ -1,5 +1,6 @@
 package mainHW;
 
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -9,8 +10,28 @@ import java.util.concurrent.atomic.AtomicReference;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
+/**
+ * Parallelized grid search for C4.5
+ *
+ */
 public class MainHW {
 
+	/**
+	 * Parallelized grid search for C4.5 trees.
+	 * <p>
+	 * Find the optimal parameters for 
+	 * <code>MinNumObj</code> and <code>ConfidenceFactor</code>
+	 * (respectively, the minimum number of instances per leaf
+	 * and the confidence threshold for pruning). The accuracy
+	 * is computed via 10-fold cross-validation.
+	 * </p>
+	 * @param args 
+	 * <ul>
+	 * <li>args[0] = path to .arff file </li> 
+	 * <li>args[1] = index of the class parameter (optional:
+	 * if omitted, will default to the last column)</li>
+	 * </ul>
+	 */
 	public static void main(String[] args) {
 		DataSource source;
 		
@@ -18,9 +39,9 @@ public class MainHW {
 		int maxM = 10;
 		double stepM = 1; // 10 steps
 		
-		float minC = (float)0.1;
-		double maxC = 0.5;
-		double stepC = 0.008; // 50 steps
+		float minC = 0.1f;
+		float maxC = 0.5f;
+		float stepC = 0.01f; // 50 steps
 				
 		try {
 			source = new DataSource(args[0]);
@@ -40,8 +61,9 @@ public class MainHW {
 			Long start = System.currentTimeMillis();
 			ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()); 			
 			
+			
 			GridPoint p0 = new GridPoint(minM, minC, data);
-			p0.computeMetrics();
+			//p0.computeMetrics();
 			AtomicReference<GridPoint> maxPoint = new AtomicReference<GridPoint>(p0);
 			AtomicLong maxVal = new AtomicLong();
 
@@ -56,11 +78,15 @@ public class MainHW {
 			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
 			Long elapsed = System.currentTimeMillis() - start;
 			
+			// Retrieve max value
 			p0 = maxPoint.get();
-			System.out.println(p0.m);
-			System.out.println(p0.c);
-			System.out.println(((Double)(elapsed/1000.0)).toString());
-
+			
+			System.out.println(
+					String.format(
+							Locale.ROOT,
+							"%s,%f,%f,%f",
+							p0.m, p0.c, p0.accuracy, (Double)(elapsed/1000.0))
+					);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
