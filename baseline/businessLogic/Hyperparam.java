@@ -11,7 +11,7 @@ public class Hyperparam {
 
 		CVParameterSelection ps = new CVParameterSelection();
 		ps.setClassifier(classifier);
-		ps.setNumFolds(folds);  // using 5-fold CV
+		ps.setNumFolds(folds);  // using #folds CV
 		ps.addCVParameter("C 0.1 0.5 50");
 		ps.addCVParameter("M 1 10 10");
 
