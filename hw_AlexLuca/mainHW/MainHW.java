@@ -1,6 +1,5 @@
 package mainHW;
 import java.util.Collections;
-
 import java.util.concurrent.ConcurrentLinkedQueue;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
@@ -12,11 +11,12 @@ public class MainHW {
 		DataSource source;
 		ConcurrentLinkedQueue<GridPoint> grid, treeGrid;
 		
-		int minM = 0;
-		int maxM = 2;
-		double step = 0.2; 
-		int minC = 0;
-		int maxC = 2;
+		int minM = 1;
+		int maxM = 10;
+		double stepM = 1; 
+		double minC = 0.2;
+		double maxC = 2;
+		double stepC = 0.1;
 				
 		try {
 			source = new DataSource(args[0]);
@@ -24,9 +24,9 @@ public class MainHW {
 			
 			// Populate the grid
 			grid = new ConcurrentLinkedQueue<GridPoint>();
-			for (double m = minM ; m <= maxM; m += step) {
-				for (double c = minC; c <= maxC; c += step) {
-					grid.add(new GridPoint(m, c));
+			for (int m = minM ; m <= maxM; m += stepM) {
+				for (double c = minC; c <= maxC; c += stepC) {
+					grid.add(new GridPoint(m, c, data));
 				}
 			}
 			

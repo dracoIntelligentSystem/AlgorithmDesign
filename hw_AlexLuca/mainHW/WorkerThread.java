@@ -15,7 +15,12 @@ public class WorkerThread implements Runnable {
 	@Override
 	public void run() {
 		GridPoint point = inputQueue.poll();
-		point.computeMetrics();
+		try {
+			point.computeMetrics();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		outputQueue.add(point);
 	}
 
