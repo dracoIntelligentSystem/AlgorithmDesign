@@ -1,8 +1,8 @@
-package mainHW;
+package mainHW_sequential;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import mainHW_sequential.GridPoint;
+import mainHW.GridPoint;
 
 public class WorkerThread implements Runnable {
 

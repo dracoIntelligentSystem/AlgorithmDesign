@@ -1,4 +1,4 @@
-package mainHW;
+package mainHW_sequential;
 import java.util.Random;
 
 import mainHW_sequential.Metrics;
