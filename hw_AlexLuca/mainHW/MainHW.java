@@ -1,9 +1,10 @@
 package mainHW;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-import mainHW_sequential.AccuracyComparator;
-import mainHW_sequential.GridPoint;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
@@ -12,7 +13,7 @@ public class MainHW {
 	public static void main(String[] args) {
 //		System.out.println("Hello in HW Alex & Luca!!");
 		DataSource source;
-		ConcurrentLinkedQueue<GridPoint> grid, treeGrid;
+		ConcurrentLinkedQueue<GridPoint> grid;
 		
 		int minM = 1;
 		int maxM = 10;
@@ -27,24 +28,21 @@ public class MainHW {
 			Instances data = source.getDataSet();
 			
 			Long start = System.currentTimeMillis();
-			Integer count = 0;
 			// Populate the grid
+			ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()); 
+			
 			grid = new ConcurrentLinkedQueue<GridPoint>();
 			for (int m = minM ; m <= maxM; m += stepM) {
 				for (double c = minC; c <= maxC; c += stepC) {
-					grid.add(new GridPoint(m, c, data));
-					count++;
+					WorkerThread w = new WorkerThread(new GridPoint(m, c, data), grid);
+					executor.execute(w);
 				}
 			}
-			System.out.println(count.toString());
-			//Evaluate
-			treeGrid = new ConcurrentLinkedQueue<GridPoint>();
-			while (!grid.isEmpty()) {
-				GridPoint point = grid.poll();
-				point.computeMetrics();
-				treeGrid.add(point);
-			}
-			GridPoint max = Collections.max(treeGrid, new AccuracyComparator());
+			// Wait until the grid has been explored
+			executor.shutdown();
+			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+			
+			GridPoint max = Collections.max(grid, new AccuracyComparator());
 			
 			Long elapsed = System.currentTimeMillis() - start;
 			System.out.println(((Double)(elapsed/1000.0)).toString());

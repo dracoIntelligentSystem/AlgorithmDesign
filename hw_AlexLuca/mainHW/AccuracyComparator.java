@@ -2,8 +2,8 @@ package mainHW;
 
 import java.util.Comparator;
 
-import mainHW_sequential.GridPoint;
-import mainHW_sequential.Metrics;
+import mainHW.GridPoint;
+import mainHW.Metrics;
 
 
 public class AccuracyComparator implements Comparator<GridPoint> {

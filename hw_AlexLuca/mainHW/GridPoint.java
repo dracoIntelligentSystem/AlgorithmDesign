@@ -1,7 +1,7 @@
 package mainHW;
 import java.util.Random;
 
-import mainHW_sequential.Metrics;
+import mainHW.Metrics;
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.J48;
 import weka.core.Instances;

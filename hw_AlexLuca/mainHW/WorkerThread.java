@@ -2,21 +2,21 @@ package mainHW;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import mainHW_sequential.GridPoint;
+import mainHW.GridPoint;
 
 public class WorkerThread implements Runnable {
 
-	private ConcurrentLinkedQueue<GridPoint> inputQueue, outputQueue;
+	private GridPoint point;
+	private ConcurrentLinkedQueue<GridPoint> outputQueue;
 	
-	public WorkerThread(ConcurrentLinkedQueue<GridPoint> in,
+	public WorkerThread(GridPoint point,
 			ConcurrentLinkedQueue<GridPoint> out) {
-		this.inputQueue = in;
+		this.point = point;
 		this.outputQueue = out;
 	}
 	
 	@Override
 	public void run() {
-		GridPoint point = inputQueue.poll();
 		try {
 			point.computeMetrics();
 		} catch (Exception e) {
