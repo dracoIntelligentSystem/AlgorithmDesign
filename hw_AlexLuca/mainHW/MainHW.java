@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.ArgsParser;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
@@ -42,28 +43,21 @@ public class MainHW {
 		float minC = 0.1f;
 		float maxC = 0.5f;
 		float stepC = 0.01f; // 50 steps
-				
+		ArgsParser parser = null;
 		try {
-			source = new DataSource(args[0]);
-			Instances data = source.getDataSet();
-			try {
-		        data.setClassIndex(Integer.parseInt(args[1]));
-			} catch (ArrayIndexOutOfBoundsException e) {
-		        data.setClassIndex(data.numAttributes() - 1);
-			} catch (NumberFormatException e) {
-				System.out.println("Incorrect value.");
-				System.exit(1);
-			} catch (IllegalArgumentException e) {
-				System.out.println("Incorrect value.");
-				System.exit(1);
-			}
-			
+			parser = new ArgsParser(args);
+
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			System.exit(1);
+		}
+		
+		Instances data = parser.getData();
+
 			Long start = System.currentTimeMillis();
-			ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()); 			
-			
+			ExecutorService executor = Executors.newFixedThreadPool(16); 			
 			
 			GridPoint p0 = new GridPoint(minM, minC, data);
-			//p0.computeMetrics();
 			AtomicReference<GridPoint> maxPoint = new AtomicReference<GridPoint>(p0);
 			AtomicLong maxVal = new AtomicLong();
 
@@ -75,7 +69,12 @@ public class MainHW {
 			}
 			// Wait until the grid has been explored
 			executor.shutdown();
-			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+			try {
+				executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			Long elapsed = System.currentTimeMillis() - start;
 			
 			// Retrieve max value
@@ -87,9 +86,5 @@ public class MainHW {
 							"%s,%f,%f,%f",
 							p0.m, p0.c, p0.accuracy, (Double)(elapsed/1000.0))
 					);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }
