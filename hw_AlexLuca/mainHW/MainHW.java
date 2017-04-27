@@ -34,7 +34,6 @@ public class MainHW {
 	 * </ul>
 	 */
 	public static void main(String[] args) {
-		DataSource source;
 		
 		int minM = 1;
 		int maxM = 10;
