@@ -1,11 +1,15 @@
 package businessLogic;
 
+import java.util.Random;
+
 import weka.classifiers.Classifier;
+import weka.classifiers.Evaluation;
 import weka.classifiers.meta.CVParameterSelection;
 import weka.core.Instances;
-import weka.core.Utils;
 
 public class Hyperparam {
+	
+	
 
 	public static void runOptimizer(Classifier classifier, Instances data, int folds) throws Exception{
 
@@ -17,7 +21,16 @@ public class Hyperparam {
 
 		// build and output best options
 		ps.buildClassifier(data);
+		 
 		
-		System.out.println(Utils.joinOptions(ps.getBestClassifierOptions()));
-	}
+		Evaluation eval = new Evaluation(data);
+		eval.crossValidateModel(ps.getClassifier(), data, folds , new Random(1));
+		System.out.println(//Utils.joinOptions(ps.getBestClassifierOptions()) +" \n"+ 
+				ps.getBestClassifierOptions()[1]+","+
+				ps.getBestClassifierOptions()[3]+","+
+				eval.pctCorrect()/100.0
+				//ps.getClassifier().toString()
+				//Utils.joinOptions(ps.getClassifier().getOptions())
+		);
+	} //Utils.joinOptions(ps.getOptions())
 }
