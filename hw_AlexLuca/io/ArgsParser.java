@@ -14,6 +14,9 @@ public class ArgsParser {
 	private Instances data;
 	private Path datasetPath;
 	
+	public int minM, maxM, stepM;
+	public float  minC, maxC, stepC;
+	
 	public Instances getData() {
 		return data;
 	}
@@ -21,6 +24,9 @@ public class ArgsParser {
 	public ArgsParser(String[] args) throws FileNotFoundException, IllegalArgumentException {
 		if (args.length == 0) {
 			throw new IllegalArgumentException("Insert dataset path");
+		}
+		else if (args.length < 6) {
+			throw new IllegalArgumentException("Invalid number of arguments.");
 		}
 		for (int i = 0; i < args.length; i++) {
 			
@@ -32,6 +38,24 @@ public class ArgsParser {
 		        data.setClassIndex(data.numAttributes() - 1);
 				break;
 			case 1:
+				minM = Integer.parseInt(s);
+				break;
+			case 2:
+				maxM = Integer.parseInt(s);
+				break;
+			case 3:
+				stepM = Integer.parseInt(s);
+				break;
+			case 4:
+				minC = Float.parseFloat(s);
+				break;
+			case 5:
+				maxC = Float.parseFloat(s);
+				break;
+			case 6:
+				stepC = Float.parseFloat(s);
+				break;
+			case 7:
 				this.setClassIndex(s);
 				break;
 			default:

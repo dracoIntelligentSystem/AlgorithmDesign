@@ -9,7 +9,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import io.ArgsParser;
 import weka.core.Instances;
-import weka.core.converters.ConverterUtils.DataSource;
 
 /**
  * Parallelized grid search for C4.5
@@ -34,14 +33,7 @@ public class MainHW {
 	 * </ul>
 	 */
 	public static void main(String[] args) {
-		
-		int minM = 1;
-		int maxM = 10;
-		double stepM = 1; // 10 steps
-		
-		float minC = 0.1f;
-		float maxC = 0.5f;
-		float stepC = 0.01f; // 50 steps
+
 		ArgsParser parser = null;
 		try {
 			parser = new ArgsParser(args);
@@ -50,40 +42,47 @@ public class MainHW {
 			System.out.println(e.toString());
 			System.exit(1);
 		}
-		
+
 		Instances data = parser.getData();
+		int minM = parser.minM;
+		int maxM = parser.maxM;
+		double stepM = parser.stepM;
 
-			Long start = System.currentTimeMillis();
-			ExecutorService executor = Executors.newFixedThreadPool(16); 			
-			
-			GridPoint p0 = new GridPoint(minM, minC, data);
-			AtomicReference<GridPoint> maxPoint = new AtomicReference<GridPoint>(p0);
-			AtomicLong maxVal = new AtomicLong();
+		float minC = parser.minC;
+		float maxC = parser.maxC;
+		float stepC = parser.stepC;
 
-			for (int m = minM ; m <= maxM; m += stepM) {
-				for (float c = minC; c <= maxC; c += stepC) {
-					Worker w = new Worker(new GridPoint(m, c, data), maxPoint, maxVal);
-					executor.execute(w);
-				}
+		Long start = System.currentTimeMillis();
+		ExecutorService executor = Executors.newFixedThreadPool(16); 			
+
+		GridPoint p0 = new GridPoint(minM, minC, data);
+		AtomicReference<GridPoint> maxPoint = new AtomicReference<GridPoint>(p0);
+		AtomicLong maxVal = new AtomicLong();
+
+		for (int m = minM ; m <= maxM; m += stepM) {
+			for (float c = minC; c <= maxC; c += stepC) {
+				Worker w = new Worker(new GridPoint(m, c, data), maxPoint, maxVal);
+				executor.execute(w);
 			}
-			// Wait until the grid has been explored
-			executor.shutdown();
-			try {
-				executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			Long elapsed = System.currentTimeMillis() - start;
-			
-			// Retrieve max value
-			p0 = maxPoint.get();
-			
-			System.out.println(
-					String.format(
-							Locale.ROOT,
-							"%s,%f,%f,%f",
-							p0.m, p0.c, p0.accuracy, (Double)(elapsed/1000.0))
-					);
+		}
+		// Wait until the grid has been explored
+		executor.shutdown();
+		try {
+			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Long elapsed = System.currentTimeMillis() - start;
+
+		// Retrieve max value
+		p0 = maxPoint.get();
+
+		System.out.println(
+				String.format(
+						Locale.ROOT,
+						"%s,%f,%f,%f",
+						p0.m, p0.c, p0.accuracy, (Double)(elapsed/1000.0))
+				);
 	}
 }
