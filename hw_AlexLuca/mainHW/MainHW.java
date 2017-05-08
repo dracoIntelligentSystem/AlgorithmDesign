@@ -52,7 +52,6 @@ public class MainHW {
 		float maxC = parser.maxC;
 		float stepC = parser.stepC;
 
-		Long start = System.currentTimeMillis();
 		ExecutorService executor = Executors.newFixedThreadPool(16); 			
 
 		GridPoint p0 = new GridPoint(minM, minC, data);
@@ -73,8 +72,7 @@ public class MainHW {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Long elapsed = System.currentTimeMillis() - start;
-
+		
 		// Retrieve max value
 		p0 = maxPoint.get();
 
@@ -82,7 +80,7 @@ public class MainHW {
 				String.format(
 						Locale.ROOT,
 						"%s,%f,%f,%f",
-						p0.m, p0.c, p0.accuracy, (Double)(elapsed/1000.0))
+						p0.m, p0.c, p0.accuracy)
 				);
 	}
 }
