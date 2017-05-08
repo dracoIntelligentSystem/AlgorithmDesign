@@ -79,7 +79,7 @@ public class MainHW {
 		System.out.println(
 				String.format(
 						Locale.ROOT,
-						"%s,%f,%f,%f",
+						"%s,%f,%f",
 						p0.m, p0.c, p0.accuracy)
 				);
 	}
