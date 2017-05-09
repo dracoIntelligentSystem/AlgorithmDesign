@@ -1,7 +1,7 @@
 #!/bin/bash
 WEKAJAR=/Applications/weka-3-6-15-oracle-jvm.app/Contents/Java/weka.jar
 JVMARGS="-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=10s,filename="
-OUTPUTDIR="/Users/luca/Desktop/out"
+OUTPUTDIR="$HOME/Desktop/out"
 
 
 GRIDPARAMS=("1" "10" "1" "0.1" "0.5" "0.01")
