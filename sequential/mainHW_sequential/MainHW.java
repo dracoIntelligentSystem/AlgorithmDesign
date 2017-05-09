@@ -1,71 +1,53 @@
 package mainHW_sequential;
+
 import java.util.Collections;
+import java.util.Locale;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import mainHW_sequential.AccuracyComparator;
-import mainHW_sequential.GridPoint;
+import io.ArgsParser;
 import weka.core.Instances;
-import weka.core.converters.ConverterUtils.DataSource;
 
 public class MainHW {
 
-	public static void main(String[] args) {
-//		System.out.println("Hello in HW Alex & Luca!!");
-		DataSource source;
+	public static void main(String[] args) throws Exception {
 		ConcurrentLinkedQueue<GridPoint> grid, treeGrid;
-		
-		int minM = 1;
-		int maxM = 10;
-		double stepM = 1; // 10 steps
-		
-		double minC = 0.1;
-		double maxC = 0.5;
-		double stepC = 0.008; // 50 steps
-				
-		try {
-			source = new DataSource(args[0]);
-			Instances data = source.getDataSet();
-			
-			try {
-		        data.setClassIndex(Integer.parseInt(args[1]));
-			} catch (ArrayIndexOutOfBoundsException e) {
-		        data.setClassIndex(data.numAttributes() - 1);
-			} catch (NumberFormatException e) {
-				System.out.println("Incorrect value.");
-				System.exit(1);
-			} catch (IllegalArgumentException e) {
-				System.out.println("Incorrect value.");
-				System.exit(1);
-			}
 
-			
-			Long start = System.currentTimeMillis();
-			Integer count = 0;
-			// Populate the grid
-			grid = new ConcurrentLinkedQueue<GridPoint>();
-			for (int m = minM ; m <= maxM; m += stepM) {
-				for (double c = minC; c <= maxC; c += stepC) {
-					grid.add(new GridPoint(m, c, data));
-					count++;
-				}
-			}
-			System.out.println(count.toString());
-			//Evaluate
-			treeGrid = new ConcurrentLinkedQueue<GridPoint>();
-			while (!grid.isEmpty()) {
-				GridPoint point = grid.poll();
-				point.computeMetrics();
-				treeGrid.add(point);
-			}
-			GridPoint max = Collections.max(treeGrid, new AccuracyComparator());
-			
-			Long elapsed = System.currentTimeMillis() - start;
-			System.out.println(((Double)(elapsed/1000.0)).toString());
-			
-			
+		ArgsParser parser = null;
+		try {
+			parser = new ArgsParser(args);
+
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.toString());
+			System.exit(1);
 		}
+
+		Instances data = parser.getData();
+		int minM = parser.minM;
+		int maxM = parser.maxM;
+		double stepM = parser.stepM;
+
+		float minC = parser.minC;
+		float maxC = parser.maxC;
+		float stepC = parser.stepC;
+
+		Integer count = 0;
+		// Populate the grid
+		grid = new ConcurrentLinkedQueue<GridPoint>();
+		for (int m = minM; m <= maxM; m += stepM) {
+			for (double c = minC; c <= maxC; c += stepC) {
+				grid.add(new GridPoint(m, c, data));
+				count++;
+			}
+		}
+		// Evaluate
+		treeGrid = new ConcurrentLinkedQueue<GridPoint>();
+		while (!grid.isEmpty()) {
+			GridPoint point = grid.poll();
+			point.computeMetrics();
+			treeGrid.add(point);
+		}
+		GridPoint max = Collections.max(treeGrid, new AccuracyComparator());
+		System.out.println(String.format(Locale.ROOT, "%s,%f,%f", max.m, max.c, max.accuracy));
+
 	}
 }

@@ -2,10 +2,6 @@ package mainHW_sequential;
 
 import java.util.Comparator;
 
-import mainHW_sequential.GridPoint;
-import mainHW_sequential.Metrics;
-
-
 public class AccuracyComparator implements Comparator<GridPoint> {
 	
 	// Epsilon
@@ -21,14 +17,11 @@ public class AccuracyComparator implements Comparator<GridPoint> {
 	
 	@Override
 	public int compare(GridPoint o1, GridPoint o2) {
-		Metrics m1, m2;
-		m1 = o1.getMetrics();
-		m2 = o2.getMetrics();
-		if (Math.abs(m1.accuracy - m2.accuracy) < eps) {
+		if (Math.abs(o1.accuracy - o2.accuracy) < eps) {
 			return 0;
 		}
 		else {
-			return (int) Math.signum(m1.accuracy - m2.accuracy);
+			return (int) Math.signum(o1.accuracy - o2.accuracy);
 		}		
 	}
 
