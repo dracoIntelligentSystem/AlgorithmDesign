@@ -1,6 +1,6 @@
 #!/bin/bash
 WEKAJAR=/Applications/weka-3-6-15-oracle-jvm.app/Contents/Java/weka.jar
-JVMARGS="-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=10s,filename="
+JVMARGS="-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=0s,filename="
 OUTPUTDIR="$HOME/Desktop/out"
 
 
