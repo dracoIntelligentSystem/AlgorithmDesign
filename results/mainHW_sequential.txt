@@ -10,3 +10,7 @@ Started recording 1. No limit (duration/maxsize/maxage) in use.
 
 Use JFR.dump recording=1 to copy recording data to file.
 10,0.100000,0.854101
+Started recording 1. No limit (duration/maxsize/maxage) in use.
+
+Use JFR.dump recording=1 to copy recording data to file.
+1,0.450000,0.887350

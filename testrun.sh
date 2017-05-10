@@ -9,7 +9,7 @@ GRIDPARAMS=("1" "10" "1" "0.1" "0.5" "0.01")
 cd bin/
 
 declare -a CLASSES=("mainHW/MainHW" "mainHW_sequential/MainHW" "mainBaseline/Main")
-declare -a DATASETS=("iris" "wine-quality" "magic04")
+declare -a DATASETS=("letter-recognition")
 
 for TESTCLASS in "${CLASSES[@]}"
 do
