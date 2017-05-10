@@ -40,14 +40,15 @@ STARTTIMESTAMP=`gdate -d "$STARTTIMESTAMP" +"%s.%N"`
 TIME=`echo $ENDTIMESTAMP - $STARTTIMESTAMP | bc`
 
 # Average CPU usage
-CPUSAMPLES=`xmlstarlet sel -N jvm="$JVMURL" -N jfr="$JFRURL" -t -v "//jvm:os_processor_cpu_load/jvm:machineTotal/text()" "$XML"`
-CPUAVG=`echo $CPUSAMPLES | awk -F' ' '{s+=$1} END {print s/NR}'`
-
+xmlstarlet sel -N jvm="$JVMURL" -N jfr="$JFRURL" -t -v "//jvm:os_processor_cpu_load/jvm:machineTotal/text()" "$XML" > "$BASENAME-cpu.txt"
+CPUAVG=`awk '{s+=$1} END {print s/NR}' "$BASENAME-cpu.txt"`
+rm "$BASENAME-cpu.txt"
 
 # Get used heap stats.
-HEAPSAMPLES=`xmlstarlet sel -N jvm="$JVMURL" -N jfr="$JFRURL" -t -v "//jvm:vm_gc_heap_summary/jvm:heapUsed/text()" "$XML"`
-HEAPAVG=`echo $HEAPSAMPLES | awk -F' ' '{s+=$1} END {print s/NR}'`
-HEAPMAX=`echo $HEAPSAMPLES | tr " " "\n" | head -n 1`
+xmlstarlet sel -N jvm="$JVMURL" -N jfr="$JFRURL" -t -v "//jvm:vm_gc_heap_summary/jvm:heapUsed/text()" "$XML" > "$BASENAME-heap.txt"
+HEAPAVG=`awk '{s+=$1} END {printf("%i",s/NR)}' "$BASENAME-heap.txt"`
+HEAPMAX=`sort -nr "$BASENAME-heap.txt" | head -n 1`
+rm "$BASENAME-heap.txt"
 
 # Delete XML file and print results
 rm "$XML"
