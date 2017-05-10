@@ -26,8 +26,8 @@ public class Hyperparam {
 		Evaluation eval = new Evaluation(data);
 		eval.crossValidateModel(ps.getClassifier(), data, folds , new Random(1));
 		System.out.println(//Utils.joinOptions(ps.getBestClassifierOptions()) +" \n"+ 
-				ps.getBestClassifierOptions()[1]+","+
 				ps.getBestClassifierOptions()[3]+","+
+				ps.getBestClassifierOptions()[1]+","+
 				eval.pctCorrect()/100.0
 				//ps.getClassifier().toString()
 				//Utils.joinOptions(ps.getClassifier().getOptions())
